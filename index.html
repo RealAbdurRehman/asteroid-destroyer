@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A game where you explore the inner depths of space destroying asteroids and making your way through planetary systems." />
+    <title>Asteroid Destroyer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="/Icon/favicon.ico" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="m-0 overflow-hidden bg-black select-none">
+    <section id="start-game" class="bg-[url('/Other/earth.jpg')] bg-cover bg-center h-screen w-screen relative">
+      <img src="/Other/logo.png" alt="Space Explorer Logo" class="fixed left-1/2 translate-x-[-50%] mt-[200px] z-10" />
+      <img src="/Other/light2.png" alt="" id="light-effect" class="fixed top-[10%] left-[5%] z-0 w-[500px]" />
+      <h2 class="fixed bottom-[125px] left-1/2 translate-x-[-50%] text-gray-300 text-2xl font-semibold blink">Click to START</h2>
+    </section>
+    <section id="game-over" class="hidden">
+      <div class="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] text-center bg-gray-900 p-10 rounded-lg border-[2px] border-gray-700">
+        <img src="./public/Other/game-over.png" alt="Game Over" class="w-[500px] mx-auto" />
+        <button class="bg-gray-800 text-white px-4 py-2 mt-10" id="restart-btn">Try Again?</button>
+      </div>
+    </section>
+    <script src="./src/main.js" type="module"></script>
+  </body>
+</html>

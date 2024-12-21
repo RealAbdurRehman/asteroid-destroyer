@@ -1,0 +1,38 @@
+body {
+  font-family: "Jura", Arial, Helvetica, sans-serif;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#start-game {
+  background-size: 105% 105%;
+  animation: fade-in 2s;
+  transition: background-position 0.1s ease;
+}
+
+#light-effect {
+  transition: transform 0.1s ease;
+}
+
+.blink {
+  animation: blink 1.5s linear infinite;
+}
