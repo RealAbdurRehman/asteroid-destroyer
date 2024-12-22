@@ -5,9 +5,21 @@ import InputHandler from "./InputHandler.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export default class Player {
-  constructor(scene) {
+  constructor(scene, camera) {
     this.model = null;
     this.scene = scene;
+    this.camera = camera;
+    this.cameraConfig = {
+      offset: new THREE.Vector3(15, 5, 0),
+      lookAtOffset: new THREE.Vector3(2, 0, 0),
+      lerpFactor: 0.075,
+      tiltFactor: 0.3,
+      lateralTiltFactor: 0.5,
+      defaultZ: 0,
+    };
+    this.camera.position.copy(this.cameraConfig.offset);
+    this.cameraTarget = new THREE.Vector3();
+    this.lookAtTarget = new THREE.Vector3();
     this.input = new InputHandler(this);
     this.velocity = { y: 0, z: 0 };
     this.rotation = {
@@ -36,7 +48,10 @@ export default class Player {
     this.projectiles = [];
     this.timeToNewProjectile = 0;
     this.projectileInterval = 150;
-    this.boundary = 20;
+    this.boundaries = {
+      x: 19,
+      y: 19,
+    };
     this.soundSrcs = this.createSoundSrcs();
     this.engineSound = new Audio(this.soundSrcs.engine);
     this.init();
@@ -62,8 +77,8 @@ export default class Player {
   }
   createSoundSrcs() {
     return {
-      shoot: "/public/Audio/shoot.wav",
-      engine: "/public/Audio/engine.wav",
+      shoot: "/Audio/shoot.wav",
+      engine: "/Audio/engine.wav",
     };
   }
   update(deltaTime) {
@@ -72,7 +87,29 @@ export default class Player {
       this.move();
       this.updateHitbox();
       this.updateProjectiles(deltaTime);
+      this.updateCamera();
     }
+  }
+  updateCamera() {
+    if (!this.model) return;
+    this.cameraTarget.copy(this.model.position).add(this.cameraConfig.offset);
+    const movementTilt = new THREE.Vector3(
+      0,
+      this.velocity.y * this.cameraConfig.tiltFactor,
+      this.velocity.z * this.cameraConfig.tiltFactor
+    );
+    const lateralOffset = new THREE.Vector3(
+      0,
+      0,
+      this.velocity.z * this.cameraConfig.lateralTiltFactor
+    );
+    this.cameraTarget.add(movementTilt).add(lateralOffset);
+    this.camera.position.lerp(this.cameraTarget, this.cameraConfig.lerpFactor);
+    this.lookAtTarget
+      .copy(this.model.position)
+      .add(this.cameraConfig.lookAtOffset)
+      .add(new THREE.Vector3(0, 0, this.velocity.z * 0.5));
+    this.camera.lookAt(this.lookAtTarget);
   }
   updateHitbox() {
     this.hitbox.position.set(
@@ -161,6 +198,7 @@ export default class Player {
       );
       if (this.model.rotation.z < this.rotation.z.max)
         this.model.rotation.z += this.tiltSpeed;
+      this.cameraConfig.offset.y += 1;
     } else if (this.input.keys.includes("KeyS")) {
       this.velocity.y = Math.max(
         this.velocity.y - this.acceleration,
@@ -168,6 +206,7 @@ export default class Player {
       );
       if (this.model.rotation.z > this.rotation.z.min)
         this.model.rotation.z -= this.tiltSpeed;
+      this.cameraConfig.offset.y -= 1;
     }
     if (this.input.keys.includes("KeyA")) {
       const speedFactor = 1 - (Math.abs(this.velocity.z) / this.maxSpeed) * 0.5;
@@ -177,6 +216,7 @@ export default class Player {
       );
       if (this.model.rotation.x < this.rotation.x.max)
         this.model.rotation.x += this.tiltSpeed;
+      this.cameraConfig.offset.z += 1;
     } else if (this.input.keys.includes("KeyD")) {
       const speedFactor = 1 - (Math.abs(this.velocity.y) / this.maxSpeed) * 0.5;
       this.velocity.z = Math.max(
@@ -185,12 +225,25 @@ export default class Player {
       );
       if (this.model.rotation.x > this.rotation.x.min)
         this.model.rotation.x -= this.tiltSpeed;
+      this.cameraConfig.offset.z -= 1;
     }
+    this.cameraConfig.offset.y = THREE.MathUtils.clamp(
+      this.cameraConfig.offset.y,
+      3,
+      7
+    );
+    this.cameraConfig.offset.z = THREE.MathUtils.clamp(
+      this.cameraConfig.offset.z,
+      -3,
+      3
+    );
     const epsilon = 0.0001;
     if (
       !this.input.keys.includes("KeyA") &&
       !this.input.keys.includes("KeyD")
     ) {
+      this.cameraConfig.offset.z +=
+        (this.cameraConfig.defaultZ - this.cameraConfig.offset.z) * 0.05;
       if (this.model.rotation.x > epsilon)
         this.model.rotation.x -= this.tiltSpeed;
       else if (this.model.rotation.x < -epsilon)
@@ -201,6 +254,7 @@ export default class Player {
       !this.input.keys.includes("KeyW") &&
       !this.input.keys.includes("KeyS")
     ) {
+      this.cameraConfig.offset.y += (5 - this.cameraConfig.offset.y) * 0.05;
       if (this.model.rotation.z > epsilon)
         this.model.rotation.z -= this.tiltSpeed;
       else if (this.model.rotation.z < -epsilon)
@@ -217,18 +271,18 @@ export default class Player {
     if (Math.abs(this.velocity.y) < 0.0001) this.velocity.y = 0;
   }
   handleBoundaries() {
-    if (this.model.position.z >= this.boundary) {
-      this.model.position.setZ(this.boundary);
+    if (this.model.position.z >= this.boundaries.x) {
+      this.model.position.setZ(this.boundaries.x);
       this.velocity.z = 0;
-    } else if (this.model.position.z <= -this.boundary) {
-      this.model.position.setZ(-this.boundary);
+    } else if (this.model.position.z <= -this.boundaries.x) {
+      this.model.position.setZ(-this.boundaries.x);
       this.velocity.z = 0;
     }
-    if (this.model.position.y >= this.boundary) {
-      this.model.position.setY(this.boundary);
+    if (this.model.position.y >= this.boundaries.y) {
+      this.model.position.setY(this.boundaries.y);
       this.velocity.y = 0;
-    } else if (this.model.position.y <= -this.boundary) {
-      this.model.position.setY(-this.boundary);
+    } else if (this.model.position.y <= -this.boundaries.y) {
+      this.model.position.setY(-this.boundaries.y);
       this.velocity.y = 0;
     }
   }
