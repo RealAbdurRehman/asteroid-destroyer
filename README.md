@@ -7,9 +7,9 @@
 Asteroid Destroyer is an intense, action-packed shooting game that brings players to the cosmos. As you explore the dark expanse, you must fight your way through deadly asteroids, using quick reflexes and precise control over your spaceship.
 
 <p align="center">
-	<!-- <img src="" alt="Demo"> -->
+	<img src="https://cloud-5nj90tfrh-hack-club-bot.vercel.app/0whatsapp_image_2024-12-22_at_12.13.42_pm.jpeg" alt="Demo">
 	<br>
-	<!-- <a href="">Live demo</a> -->
+	<a href="https://asteroid-destroyer-nine.vercel.app">Live demo</a>
 	<br>
 </p>
 
@@ -33,5 +33,5 @@ Asteroid Destroyer is an intense, action-packed shooting game that brings player
 
 ## In-Game Shots
 
-<!-- ![Demo 1]()
-![Demo 2]() -->
+![Demo 1](https://cloud-x3dm87wzq-hack-club-bot.vercel.app/0whatsapp_image_2024-12-22_at_12.13.43_pm.jpeg)
+![Demo 2](https://cloud-7j4a0a4q3-hack-club-bot.vercel.app/0whatsapp_image_2024-12-22_at_12.13.43_pm_1_.jpeg)
