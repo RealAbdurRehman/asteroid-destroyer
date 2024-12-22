@@ -128,7 +128,7 @@ export class Asteroid extends Enemy {
       height: radius * 2,
       depth: radius * 2,
     };
-    const soundSrcs = { passBy: "/public/Audio/asteroid.wav" };
+    const soundSrcs = { passBy: "/Audio/asteroid.wav" };
     super(scene, { position, velocity, model, soundSrcs, hitboxDimensions });
     this.radius = radius;
     this.material = material;
