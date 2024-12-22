@@ -10,7 +10,7 @@ export class Explosion {
     this.material = this.createMaterial();
     this.explosion = new THREE.Mesh(this.geometry, this.material);
     this.light = this.createLight();
-    this.soundSrc = "/public/Audio/explosion.flac";
+    this.soundSrc = "/Audio/explosion.flac";
     this.init();
   }
   init() {
