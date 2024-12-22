@@ -7,16 +7,11 @@ import { Explosion } from "./classes/Explosion.js";
 import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { DifficultyManager } from "./classes/DifficultyManager.js";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
+import { checkCollision, playMusic, moveBackground } from "./utils.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
-import {
-  adjustCamera,
-  checkCollision,
-  playMusic,
-  moveBackground,
-} from "./utils.js";
 
 moveBackground();
 
@@ -35,12 +30,13 @@ exrLoader.load("/background.exr", (texture) => {
 });
 
 const camera = new THREE.PerspectiveCamera(
-  100,
+  75,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-camera.position.set(10, 0, 0);
+camera.rotation.y = THREE.MathUtils.degToRad(90);
+camera.position.set(15, 0, 0);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -48,7 +44,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
-scene.add(new THREE.AmbientLight(0xcccccc, 10));
+scene.add(new THREE.AmbientLight(0xffffff, 10));
 
 const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
@@ -158,7 +154,7 @@ function stopGame() {
 
 function init() {
   gameOver = false;
-  player = new Player(scene);
+  player = new Player(scene, camera);
   enemies = [];
   explosions = [];
   debrisArray = [];
@@ -179,7 +175,6 @@ function animate(timestamp) {
   lastTime = timestamp;
   if (player.model) {
     player.update(deltaTime);
-    adjustCamera(camera, player);
     spawnEnemies(deltaTime);
     for (let i = enemies.length - 1; i >= 0; i--) {
       const enemy = enemies[i];
