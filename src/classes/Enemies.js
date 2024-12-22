@@ -106,8 +106,8 @@ export class Asteroid extends Enemy {
     const textureLoader = new THREE.TextureLoader();
     const aoTexture = textureLoader.load("/Asteroid Texture/ao.jpg");
     const colorTexture = textureLoader.load("/Asteroid Texture/color.jpg");
-    const heightTexture = textureLoader.load("/Asteroid Texture/height.jpg");
-    const normalTexture = textureLoader.load("/Asteroid Texture/normal.jpg");
+    const heightTexture = textureLoader.load("/Asteroid Texture/height.png");
+    const normalTexture = textureLoader.load("/Asteroid Texture/normal.png");
     const roughnessTexture = textureLoader.load(
       "/Asteroid Texture/roughness.jpg"
     );
