@@ -1,9 +1,5 @@
 import * as THREE from "three";
 
-export function adjustCamera(camera, player) {
-  if (player.model) camera.lookAt(player.model.position);
-}
-
 export function checkCollision(box1, box2) {
   return {
     x: box1.right >= box2.left && box1.left <= box2.right,
@@ -25,6 +21,7 @@ export function playMusic() {
   backgroundMusic.loop = true;
   backgroundMusic.play();
 }
+
 export function moveBackground() {
   const parallax = document.querySelector("#start-game");
   const lightEffect = document.querySelector("#light-effect");
