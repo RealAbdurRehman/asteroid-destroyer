@@ -101,8 +101,8 @@ function spawnEnemies(deltaTime) {
   if (timeToNewEnemy >= enemyInterval) {
     const position = {
       x: -500,
-      y: Math.random() * (player.boundary * 2) - player.boundary,
-      z: Math.random() * (player.boundary * 2) - player.boundary,
+      y: Math.random() * (player.boundaries.y * 2) - player.boundaries.y,
+      z: Math.random() * (player.boundaries.x * 2) - player.boundaries.x,
     };
     const velocity = difficultyManager.getEnemyVelocity();
     const enemy = new Asteroid(scene, { position, velocity });
